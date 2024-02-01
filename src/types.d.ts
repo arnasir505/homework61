@@ -8,3 +8,17 @@ export interface ApiCountry {
   alpha3Code: string;
   independent: boolean;
 }
+
+export interface ApiCountryExtended {
+  name: string;
+  borders: string[];
+  capital: string;
+  population: number;
+  flag: string;
+  region: string;
+  area: number;
+}
+
+export interface Border {
+  name: string;
+}

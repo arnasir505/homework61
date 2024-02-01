@@ -1,11 +1,13 @@
 import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react';
-import { ApiCountry, Country } from './types';
+import { ApiCountry, ApiCountryExtended, Country } from './types';
 import CountryItem from './components/CountryItem/CountryItem';
+import CountryInfo from './components/CountryInfo/CountryInfo';
 
 function App() {
   const [countries, setCountries] = useState<Country[]>([]);
-  const [selectedCounty, setSelectedCountry] = useState(null);
+  const [selectedCountry, setSelectedCountry] =
+    useState<ApiCountryExtended | null>(null);
 
   const fetchData = useCallback(async () => {
     const response = await axios.get<ApiCountry[]>(
@@ -27,10 +29,9 @@ function App() {
   }, [fetchData]);
 
   const getCountryInfo = async (alpha3Code: string) => {
-    const response = await axios.get(`alpha/${alpha3Code}`);
+    const response = await axios.get<ApiCountryExtended>(`alpha/${alpha3Code}`);
     const country = response.data;
     setSelectedCountry(country);
-    console.log(country);
   };
 
   return (
@@ -48,7 +49,19 @@ function App() {
             ))}
           </ul>
         </div>
-        <div className='col-8'></div>
+        <div className='col-8 p-5'>
+          {selectedCountry && (
+            <CountryInfo
+              name={selectedCountry.name}
+              borders={selectedCountry.borders}
+              capital={selectedCountry.capital}
+              population={selectedCountry.population}
+              flag={selectedCountry.flag}
+              region={selectedCountry.region}
+              area={selectedCountry.area}
+            />
+          )}
+        </div>
       </div>
     </div>
   );
