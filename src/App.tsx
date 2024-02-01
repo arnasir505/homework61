@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { ApiCountry, ApiCountryExtended, Country } from './types';
 import CountryItem from './components/CountryItem/CountryItem';
 import CountryInfo from './components/CountryInfo/CountryInfo';
+import Spinner from './components/Spinner/Spinner';
 
 function App() {
   const [countries, setCountries] = useState<Country[]>([]);
@@ -37,17 +38,21 @@ function App() {
   return (
     <div className='container'>
       <div className='row p-5'>
-        <div className='col-4 overflow-auto' style={{ maxHeight: '500px' }}>
-          <ul className='list-group'>
-            {countries.map((country) => (
-              <CountryItem
-                name={country.name}
-                alpha3Code={country.alpha3Code}
-                onClick={getCountryInfo}
-                key={country.alpha3Code}
-              />
-            ))}
-          </ul>
+        <div className='col-4 overflow-auto' style={{ maxHeight: '450px' }}>
+          {countries.length > 0 ? (
+            <ul className='list-group'>
+              {countries.map((country) => (
+                <CountryItem
+                  name={country.name}
+                  alpha3Code={country.alpha3Code}
+                  onClick={getCountryInfo}
+                  key={country.alpha3Code}
+                />
+              ))}
+            </ul>
+          ) : (
+            <Spinner />
+          )}
         </div>
         <div className='col-8 p-5'>
           {selectedCountry && (

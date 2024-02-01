@@ -22,6 +22,7 @@ const CountryInfo: React.FC<Props> = ({
   area,
 }) => {
   const [borderCountries, setBorderCountries] = useState<Border[]>([]);
+  const [populationFormat, setPopulationFormat] = useState('');
 
   const fetchData = useCallback(async () => {
     const promises = borders.map(async (alpha3Code): Promise<Border> => {
@@ -41,6 +42,7 @@ const CountryInfo: React.FC<Props> = ({
     if (borders) {
       fetchData();
     }
+    setPopulationFormat(new Intl.NumberFormat().format(population));
   }, [fetchData]);
 
   return (
@@ -48,29 +50,31 @@ const CountryInfo: React.FC<Props> = ({
       <img
         src={flag}
         alt='flag'
-        className='float-end'
+        className='float-end border border-black'
         style={{ maxWidth: '400px', height: 'auto' }}
       />
-      <h1>{name}</h1>
-      <p>
+      <h1 className='mb-3'>{name}</h1>
+      <p className='mb-1'>
         <span className='fw-bold'>Capital:</span> {capital}
       </p>
-      <p>
-        <span className='fw-bold'>Population:</span> {population}
+      <p className='mb-1'>
+        <span className='fw-bold'>Population:</span> {populationFormat}
       </p>
-      <p>
+      <p className='mb-1'>
         <span className='fw-bold'>Region:</span> {region}
       </p>
-      <p>
+      <p className='mb-3'>
         <span className='fw-bold'>Area:</span> {area} km²
       </p>
-      <span className='fw-bold'>Has borders with:</span>
       {borders && (
-        <ul>
-          {borderCountries.map((border) => (
-            <li key={border.name}>{border.name}</li>
-          ))}
-        </ul>
+        <>
+          <span className='fw-bold'>Has borders with:</span>
+          <ul>
+            {borderCountries.map((border) => (
+              <li key={border.name}>{border.name}</li>
+            ))}
+          </ul>
+        </>
       )}
     </div>
   );
